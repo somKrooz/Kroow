@@ -1,6 +1,8 @@
 # Control Wallpapers in Gnome Environment
 A Simple Python Tool To Control Wallpapers in Gnome Environment Through CLI 
 
+<img width = "800" src = "./Demo/Kroow.gif"></img>
+
 ## Installation
 How to Install The Tool:
 ```
@@ -14,4 +16,4 @@ try restarting the terminal
 ### New Feature 
 - Added a json config system
 
-find the config in .config/Krooz/kroow.json
+find the config in .config/Krooz/kroow.json after Installation
