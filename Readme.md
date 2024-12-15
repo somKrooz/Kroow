@@ -9,6 +9,7 @@ git clone https://github.com/somKrooz/Kroow.git
 ```
 This will give you a Alias that you can copy and paste in your .bashrc file  
 source ~/.bashrc
+try restarting the terminal
 
 This is a personal project so most of the things are hardcoded,
 in future if i extend this i may add config file support 
