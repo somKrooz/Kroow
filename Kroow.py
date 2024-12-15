@@ -2,6 +2,7 @@ import subprocess
 import os
 import click
 import random
+import json
 
 def default(d):
     try:
@@ -10,11 +11,14 @@ def default(d):
         print("Error Occured Setting Up The Wallpaper")
 
 def randomWall():
-    path = "/home/somkrooz/Downloads/Wallpapers"
+    path = os.path.join(os.path.expanduser("~"),".config","Krooz","kroow.json")
+    with open(path,"r") as config: 
+        path = json.load(config)["dir"]
+
     try:
         randomWallpaper = []
         for i in os.listdir(path):
-            if i.startswith(".git"):
+            if str(i).startswith(".git"):
                 pass
             randomWallpaper.append(str(os.path.join(path, i)))
         
