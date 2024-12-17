@@ -4,6 +4,8 @@ import click
 import random
 import json
 
+state = "Debug" 
+
 def default(d):
     try:
         subprocess.run(f"gsettings set org.gnome.desktop.background picture-uri-dark 'file://{d}'",shell=True, capture_output=True, text=True)
@@ -12,17 +14,24 @@ def default(d):
 
 def randomWall():
     path = os.path.join(os.path.expanduser("~"),".config","Krooz","kroow.json")
-    with open(path,"r") as config: 
-        path = json.load(config)["dir"]
-
+    with open(path,"r") as config:
+        try: 
+            path = json.load(config)["dir"]
+        except FileNotFoundError as e:
+            print(f"Inavlid Directory: {e}")
     try:
         randomWallpaper = []
         for i in os.listdir(path):
             if str(i).startswith(".git"):
                 pass
-            randomWallpaper.append(str(os.path.join(path, i)))
+            else:
+                if i.endswith(('.png', '.jpeg', '.jpg')):
+                    randomWallpaper.append(str(os.path.join(path, i)))
         
-        subprocess.run(f"gsettings set org.gnome.desktop.background picture-uri-dark 'file://{random.choice(randomWallpaper)}'",shell=True, capture_output=True, check=True,text=True)
+        wallpaper = random.choice(randomWallpaper)
+        subprocess.run(f"gsettings set org.gnome.desktop.background picture-uri-dark 'file://{wallpaper}'",shell=True, capture_output=True, check=True,text=True)
+        if state == "Debug":
+            print(f"Wallpaper Name: {wallpaper}")
     except subprocess.CalledProcessError as e:
         print("Error Occured Setting Up The Wallpaper")
 
