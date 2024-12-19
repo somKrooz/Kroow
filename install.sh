@@ -8,8 +8,19 @@ python3 ./config.py
 #Add To Path
 CALLABLE_PATH=$(realpath callable.sh)
 pip install .
-echo "alias kroow='$CALLABLE_PATH'" >> ~/.bashrc
+
+if [[ "$SHELL" == *"bash"* ]]; then
+    echo "alias kroow='$CALLABLE_PATH'" >> ~/.bashrc
+    source ~/.bashrc
+
+elif [[ "$SHELL" == *"zsh"* ]]; then
+    echo "alias kroow='$CALLABLE_PATH'" >> ~/.zshrc
+    source ~/.zshrc
+else
+    echo "Unknown shell"
+fi
+
 
 echo ""
+echo ""
 echo "Kroow is Sucessfully Installed......."
-source ~/.bashrc
