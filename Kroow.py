@@ -55,7 +55,7 @@ class WinMethod(WallpaperMethod):
 class LinMethod(WallpaperMethod):
     def Implementation(self, Path: str):
         try:
-            command = f"gsettings set org.gnome.desktop.background picture-uri 'file://{Path}'"
+            command = f"gsettings set org.gnome.desktop.background picture-uri-dark '{Path}'"
             subprocess.run(command, shell=True, capture_output=True, check=True, text=True)
             print(f"Wallpaper set to: {Path}")
             return True
@@ -118,32 +118,42 @@ class WallpaperFactory:
         elif mode == "r" :
             return RandomWallpaperSystem()
         else:
-            raise NotImplementedError("This System  Not Imlemented Yet...")
-            
+            raise NotImplementedError("This System Not Implemented Yet...")
 
 
-def ApplyWallpaper(path: str = None):
-    WallpapeMethod = SettingFactory.GetWallpaperMethod()
+def ApplyWallpaper(path: str = None , random:bool = False , isconfig:bool = False):
+    WallpaperMethod = SettingFactory.GetWallpaperMethod()
     WallpaperSystem = WallpaperFactory()
     ConfigPath = PathFactory().GetPlatform().GetConfigPath()   
-
-    if path == None:
-        Path = WallpaperSystem.CreateSystem(mode="r").Behaviour(ConfigPath)  
-    else:
-        Path = WallpaperSystem.CreateSystem(mode="d" , wallpaper_path=path) 
     
+    if isconfig:
+        print(f"Config Path: {ConfigPath}")
+        return
+
+    if random:
+        Path = WallpaperSystem.CreateSystem(mode="r").Behaviour(ConfigPath)  
+    elif not random:
+        Path = WallpaperSystem.CreateSystem(mode="d" , wallpaper_path=path).Behaviour() 
+    else:
+        Path = None
+
     if Path:
-        WallpapeMethod.Implementation(Path)  
+        WallpaperMethod.Implementation(Path)  
 
 
 @click.command()
 @click.option("--d", type=str, help="Set a specific wallpaper by providing the full path")
-@click.option("--r", is_flag=True, help="Set a random wallpaper")
-def setWallpaper(d, r):
+@click.option("--r", is_flag=True, help="Set a random wallpaper From Config Directory")
+@click.option("--config", is_flag=True, help="Get Config File Path")
+
+def setWallpaper(d, r, config):
     if d:
         ApplyWallpaper(path=d)  
     elif r:
-        ApplyWallpaper()  
+        ApplyWallpaper(random=True) 
+    elif config:
+        ApplyWallpaper(isconfig=True)
     else:
         print("Please provide either a path or use the random flag to set a wallpaper.")
 
+setWallpaper()
